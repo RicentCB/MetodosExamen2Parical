@@ -119,10 +119,11 @@ if __name__ == "__main__":
                 tempProb = math.exp(tempValDen)
                 #Revisar tiempo de ejecucion
                 if time.time() - iniTime > 28:
-                    print("P:",bestProb[i])
-                    print("X:",arrValX[i])
-                    print("Y:",arrValY[i])
-                    print("Z:",arrValY[i])
+                    print(json.dumps({"P":bestProb[i],"X":arrValX[i],"Y":arrValY[i],"Z":arrayZc[i]}))
+                    # print("P:",bestProb[i])
+                    # print("X:",arrValX[i])
+                    # print("Y:",arrValY[i])
+                    # print("Z:",arrayZc[i])
                     sys.exit()
             
             #Guardar Valores de X,Y y la probabalidad
@@ -138,10 +139,12 @@ if __name__ == "__main__":
         arrayZc.append(evulateFunction(arrAuxValX[indexAux], arrAuxValY[indexAux]))
         bestProb.append(arrAuxProb[indexAux])
     #Termino todas las interaciones
-    print("P:",arrAuxProb[i])
-    print("X:",arrAuxValX[len(arrAuxValX)-1])
-    print("Y:",arrAuxValY[len(arrAuxValY)-1])
-    print("Z:",arrayZc[len(arrayZc)-1])
+    
+    print(json.dumps({
+        "P":bestProb[len(bestProb)-1],
+        "X":arrValX[len(arrValX)-1],
+        "Y":arrValY[len(arrValY)-1],
+        "Z":arrayZc[len(arrayZc)]}))
 
 
 
