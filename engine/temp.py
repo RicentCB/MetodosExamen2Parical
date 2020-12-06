@@ -75,21 +75,24 @@ if __name__ == "__main__":
     print(bestProb[0])
     #---------------------------------------------------------------------------------
     #Comenzar con las interaciones (100 individuos) *(100 poblaciones)
-    for i in range(0 , 1):
+    for i in range(0 , 2):
         xAux = arrValX[i]
-        yAux = arrValX[i]
-        zcAux = evulateFunction(xAux, yAux)
+        yAux = arrValY[i]
         facTemp = 0.2 if (i == 0) else 0.5 # 0.2 solo para la primer interacion
         t = arrayZc[i] * facTemp
-        arraAuxValX = list()
-        arraAuxValY = list()
+        arrAuxValX = list()
+        arrAuxValY = list()
+        arrAuxProb = list()
         for j in range(0, 4):
-            alA = generateRandom()
-            alB = generateRandom()
+            #Generacion de numeros Aleatorios
+            alA = generateRandom()[0]
+            alB = generateRandom()[0]
             obsAlX = norm.ppf(alA, 0, sigmaX)
             obsAlY = norm.ppf(alB, 0, sigmaY)
+            #Calcular resto de valores
             tempValX = (xAux + obsAlX)
             tempValY = (yAux + obsAlY)
+            #TODO: Evaluar primero restricciones
             tempValZn = evulateFunction(tempValX, tempValY)
             tempValDen = (tempValZn - arrayZc[i]) / t
             tempProb = math.exp(tempValDen)
@@ -97,8 +100,8 @@ if __name__ == "__main__":
             #Revisar si se han cumpliado las restricciones y la probabilidad calculada es mejor que la anterior
             while not(evaluateRestrictions(tempValX, tempValY) and tempProb >= bestProb[i]):
                 #Recalcular con nuevos numeros aleatorios
-                alA = generateRandom()
-                alB = generateRandom()
+                alA = generateRandom()[0]
+                alB = generateRandom()[0]
                 obsAlX = norm.ppf(alA, 0, sigmaX)
                 obsAlY = norm.ppf(alB, 0, sigmaY)
                 tempValX = (xAux + obsAlX)
@@ -108,10 +111,17 @@ if __name__ == "__main__":
                 tempProb = math.exp(tempValDen)
             
             #Guardar Valores de X,Y y la probabalidad
-            print(tempProb)
-            print(tempValX)
-            print(tempValY)
-            print("")
+            arrAuxValX.append(tempValX)
+            arrAuxValY.append(tempValY)
+            arrAuxProb.append(tempProb)
+        #Ya se han obtenido los individuos elegeir el mejor
+        maxProb = numpy.amax(arrAuxProb)
+        #Buscar inidice
+        indexAux = arrAuxProb.index(maxProb)
+        arrValX.append(arrAuxValX[indexAux])
+        arrValY.append(arrAuxValY[indexAux])
+        arrayZc.append(evulateFunction(arrAuxValX[indexAux], arrAuxValY[indexAux]))
+        bestProb.append(arrAuxProb[indexAux])
 
 
 
