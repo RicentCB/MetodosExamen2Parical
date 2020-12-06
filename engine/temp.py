@@ -40,7 +40,7 @@ if __name__ == "__main__":
     bestProb = list()
     arrayZc = list()
     #Calculo de la interacion 0
-    arrayZc[0] = evulateFunction(medX, medY)
+    arrayZc.append(evulateFunction(medX, medY))
     al1 = 0.0972414582262059
     al2 = 0.125047331544003
     obsAlX = norm.ppf(al1, 0, sigmaX)
@@ -63,34 +63,60 @@ if __name__ == "__main__":
     zn0 = evulateFunction(arrValX[0],arrValY[0])
     den0 = (zn0 - arrayZc[0]) / (0.2*arrayZc[0])
     bestProb.append(math.exp(den0))
-    
+    #Iteracion Cero
+    print("Interacion 0")
+    # print(arrayZc[0])
+    print(arrValX[0])
+    print(arrValY[0])
+    # print(obsAlX)
+    # print(obsAlY)
+    # print(zn0)
+    # print(den0)
+    print(bestProb[0])
     #---------------------------------------------------------------------------------
     #Comenzar con las interaciones (100 individuos) *(100 poblaciones)
-    for i in range(0 , 4):
+    for i in range(0 , 1):
         xAux = arrValX[i]
         yAux = arrValX[i]
         zcAux = evulateFunction(xAux, yAux)
-        facTemp = (i == 0) ? 0.2 : 0.5 # 0.2 solo para la primer interacion
+        facTemp = 0.2 if (i == 0) else 0.5 # 0.2 solo para la primer interacion
         t = arrayZc[i] * facTemp
         arraAuxValX = list()
         arraAuxValY = list()
-        for i in range(0, 4):
+        for j in range(0, 4):
             alA = generateRandom()
             alB = generateRandom()
             obsAlX = norm.ppf(alA, 0, sigmaX)
             obsAlY = norm.ppf(alB, 0, sigmaY)
-            arraAuxValX.append(xAux + obsAlX)
-            arraAuxValY.append(yAux + obsAlY)
-            #TODO: Cumplir restricciones, revisar probabilidad anterior y ver si es mejor
+            tempValX = (xAux + obsAlX)
+            tempValY = (yAux + obsAlY)
+            tempValZn = evulateFunction(tempValX, tempValY)
+            tempValDen = (tempValZn - arrayZc[i]) / t
+            tempProb = math.exp(tempValDen)
 
-    print(arrayZc[0])
-    print(arrValX[0])
-    print(arrValY[0])
-    print(obsAlX)
-    print(obsAlY)
-    print(zn0)
-    print(den0)
-    print(bestProb[0])
+            #Revisar si se han cumpliado las restricciones y la probabilidad calculada es mejor que la anterior
+            while not(evaluateRestrictions(tempValX, tempValY) and tempProb >= bestProb[i]):
+                #Recalcular con nuevos numeros aleatorios
+                alA = generateRandom()
+                alB = generateRandom()
+                obsAlX = norm.ppf(alA, 0, sigmaX)
+                obsAlY = norm.ppf(alB, 0, sigmaY)
+                tempValX = (xAux + obsAlX)
+                tempValY = (yAux + obsAlY)
+                tempValZn = evulateFunction(tempValX, tempValY)
+                tempValDen = (tempValZn - arrayZc[i]) / t
+                tempProb = math.exp(tempValDen)
+            
+            #Guardar Valores de X,Y y la probabalidad
+            print(tempProb)
+            print(tempValX)
+            print(tempValY)
+            print("")
+
+
+
+
+    
 
 
 
