@@ -1,9 +1,19 @@
+//Python
+const { PythonShell } = require("python-shell");
+var path = require("path");
+//Funcion que Incializa el arreglo de Automatas
+var options = {
+    // mode: 'json',
+    pythonOptions: ['-u'],
+    scriptPath: path.join(__dirname, 'engine/'),
+    args: []
+};
+//Documento JS
 $(document).ready(function() {
     //Obtener Valores de las coordenadas
     arrXVal = [5]
     arrYVal = [5]
-
-    //
+        //
     $("#calcBtn").click(function(e) {
         e.preventDefault();
         arrValidateCoords = []
@@ -19,9 +29,17 @@ $(document).ready(function() {
         arrYVal[4] = $(".inputNumber#valy5").val();
         for (let index = 0; index < 5; index++) {
             if (arrXVal[index] !== '' && arrYVal[index] !== '') {
-                arrValidateCoords.push({ "X": arrXVal[index], "Y": arrYVal[index] })
+                arrValidateCoords.push(arrXVal[index])
+                arrValidateCoords.push(arrYVal[index])
             }
         }
-        console.log(arrValidateCoords)
+        console.log(arrValidateCoords);
+        //
+        options.args = arrValidateCoords
+        let PythonScript = new PythonShell('readJson.py', options);
+        //Creamos el automata
+        PythonScript.on('message', function(jsonString) {
+            console.log(jsonString)
+        });
     })
 });
