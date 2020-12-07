@@ -3,6 +3,8 @@ import time
 import json
 import random
 import numpy
+import matplotlib.pyplot as plt
+
 
 class ATS:
     number_variables = 0
@@ -23,6 +25,23 @@ class ATS:
 
         self.init_gauss() # Indica que las evaluaciones, restricciones y variables pertenecen a la función Gaussiana
         self.solve()      #Resuelve para las restricciones, variables y evaluaciones de la funcion lineal
+
+        #Grafica 
+                
+        # Prepare the data
+        x = numpy.linspace(0, 10, 100)
+        lineal = 10*numpy.cos(x)+3
+        exp = 10*numpy.sin(x)+3
+
+        # Plot the data
+        plt.plot(x, lineal, label='Lineal')
+        plt.plot(x, exp, label='Exponencial')
+
+        # Add a legend
+        plt.legend()
+
+        # Show the plot
+        plt.show()
 
         
 
@@ -122,6 +141,6 @@ class ATS:
         
         
 
-A = ATS([(1, 0.42), (3, 0.75), (3.5, 1.00), (4, 0.92)])
+# A = ATS([(1, 0.42), (3, 0.75), (3.5, 1.00), (4, 0.92)])
 # A = ATS([(15, 0.3), (25, 0.45), (30, 0.78), (34, 1), (40, 0.85)])
 # A = ATS([(0.2, 0.1), (0.5,0.83), (0.9, 0.4)])
