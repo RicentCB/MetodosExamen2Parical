@@ -21,17 +21,24 @@ class ATS:
         self.NUM_POBL = num_pobl
 
         self.init_line() # Indica que las evaluaciones, restricciones y variables pertenecen a la función Lineal
-        self.solve()     #Resuelve para las restricciones, variables y evaluaciones de la funcion lineal
+        solLine = self.solve()     #Resuelve para las restricciones, variables y evaluaciones de la funcion lineal
 
         self.init_gauss() # Indica que las evaluaciones, restricciones y variables pertenecen a la función Gaussiana
-        self.solve()      #Resuelve para las restricciones, variables y evaluaciones de la funcion lineal
+        solGauss = self.solve()      #Resuelve para las restricciones, variables y evaluaciones de la funcion lineal
 
         #Grafica 
+        xValues = list()
+        yValues = list()
+        for i in range(len(points)):
+            xValues.append(points[i][0])
+            yValues.append(points[i][1])
                 
         # Prepare the data
         x = numpy.linspace(0, 10, 100)
-        lineal = 10*numpy.cos(x)+3
-        exp = 10*numpy.sin(x)+3
+
+        lineal = solLine[0]*(x)+ solLine[0]
+        m = numpy.max(xValues)
+        exp = numpy.exp(-solGauss[0]*((x-m)))
 
         # Plot the data
         plt.plot(x, lineal, label='Lineal')
@@ -39,6 +46,11 @@ class ATS:
 
         # Add a legend
         plt.legend()
+
+        #Limits
+        axes = plt.gca()
+        axes.set_xlim([numpy.min(xValues)-0.2,numpy.max(xValues)+1])
+        axes.set_ylim([numpy.min(yValues)-0.2,numpy.max(yValues)+1])
 
         # Show the plot
         plt.show()
@@ -137,6 +149,7 @@ class ATS:
             
             
         print(json.dumps({"S":best_solutions, "Z":best_value}));
+        return best_solutions
         # print(time.time() - begin)
         
         
