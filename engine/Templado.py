@@ -42,7 +42,8 @@ class ATS:
         pend = solLine[0]
         b = solLine[1]
         lineal = pend*(x1)+ b
-        m = numpy.max(xValues)
+        indexValMax = xValues.index(numpy.max(yValues))
+        m = yValues[indexValMax]
         exp = numpy.exp(-solGauss[0]*pow((x2-m),2))
 
         # Funciones

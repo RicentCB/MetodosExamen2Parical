@@ -62,7 +62,8 @@ $(document).ready(function() {
                 html += "<b> Z: " + jsonString.Z + "</b>";
                 resultContainer.find("h3#lineal").html("").html(html);
             } else {
-                var m = Math.max.apply(null, arrXVal);
+                let index = arrXVal.index(Math.max.apply(null, arrYVal))
+                var m = arrXVal[index];
                 var k = jsonString.S[0];
                 //Html final
                 let html = "f(x)<sub>2</sub> = e<sup>-" + k + "(x - " + m + ")<sup>2</sup></sup>"
