@@ -32,32 +32,32 @@ class ATS:
         for i in range(len(points)):
             xValues.append(points[i][0])
             yValues.append(points[i][1])
+            # Puntos
+            plt.scatter(points[i][0],points[i][1], color="r")
                 
         # Prepare the data
-        x = numpy.linspace(0, 10, 100)
+        x1 = numpy.linspace(numpy.min(xValues)-1, numpy.max(xValues)+1, 100)
+        x2 = numpy.linspace(numpy.min(xValues)-1, numpy.max(xValues)+2, 100)
 
-        lineal = solLine[0]*(x)+ solLine[0]
+        lineal = solLine[0]*(x1)+ solLine[1]
         m = numpy.max(xValues)
-        exp = numpy.exp(-solGauss[0]*((x-m)))
+        exp = numpy.exp(-solGauss[0]*pow((x2-m),2))
 
-        # Plot the data
-        plt.plot(x, lineal, label='Lineal')
-        plt.plot(x, exp, label='Exponencial')
+        # Funciones
+        plt.plot(x1, lineal, label='Lineal')
+        plt.plot(x2, exp, label='Exponencial')
 
         # Add a legend
         plt.legend()
 
         #Limits
         axes = plt.gca()
-        axes.set_xlim([numpy.min(xValues)-0.2,numpy.max(xValues)+1])
-        axes.set_ylim([numpy.min(yValues)-0.2,numpy.max(yValues)+1])
+        axes.set_xlim([numpy.min(xValues)-0.2,numpy.max(xValues)+0.2])
+        axes.set_ylim([numpy.min(yValues)-0.2,numpy.max(yValues)+0.2])
 
         # Show the plot
         plt.show()
 
-        
-
-        
     def generateRandom(self, limitL, limitR): #Para generar numeros aleatorios
         return (limitR - limitL)*numpy.random.random_sample() + limitL;
 
