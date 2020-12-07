@@ -1,10 +1,13 @@
 import numpy
 import math
+import time
+import sys
+import json
 from scipy.stats import norm
 
 #Algoritmo de templado simulado
 def generateRandom():
-    return abs(numpy.random.normal(0.5,1.0)*numpy.random.rand(1))
+    return (abs(numpy.random.normal(0.5,1.0)*numpy.random.rand(1))[0])
 '''
 MAX Z = 2 * cos(x) + 3 log(y)
 Sujeto a:
@@ -26,8 +29,11 @@ sigmaX = (maxResX - minResX)/6
 sigmaY = (maxResY - minResY)/6
 #Funciones axiliares para la evaluacion
 def evulateFunction(x: float, y: float):
-    #Funcion que evalua la ecpresion matematica dada por el problema
-    return (2 * math.cos(x)) + (3 * math.log10(y))
+    #Funcion que evalua la expresion matematica dada por el problema
+    if(y<=0):
+        return (2 * math.cos(x))
+    else:
+        return (2 * math.cos(x)) + (3 * math.log10(y))
 
 def evaluateRestrictions(x: float, y:float):
     #Funcion que verifica el cumplimiento de las restircciones
@@ -35,6 +41,9 @@ def evaluateRestrictions(x: float, y:float):
 
 #Funcion main
 if __name__ == "__main__":
+    #Variable de inicio de tiempo
+    iniTime = time.time()
+    #Arreglos de probabilidad
     arrValX = list()
     arrValY = list()
     bestProb = list()
@@ -63,19 +72,19 @@ if __name__ == "__main__":
     zn0 = evulateFunction(arrValX[0],arrValY[0])
     den0 = (zn0 - arrayZc[0]) / (0.2*arrayZc[0])
     bestProb.append(math.exp(den0))
-    #Iteracion Cero
-    print("Interacion 0")
-    # print(arrayZc[0])
-    print(arrValX[0])
-    print(arrValY[0])
+    # # Iteracion Cero
+    # print("Interacion 0")
+    # # print(arrayZc[0])
+    # print(arrValX[0])
+    # print(arrValY[0])
     # print(obsAlX)
     # print(obsAlY)
     # print(zn0)
     # print(den0)
-    print(bestProb[0])
+    # print(bestProb[0])
     #---------------------------------------------------------------------------------
     #Comenzar con las interaciones (100 individuos) *(100 poblaciones)
-    for i in range(0 , 2):
+    for i in range(0 , 5):
         xAux = arrValX[i]
         yAux = arrValY[i]
         facTemp = 0.2 if (i == 0) else 0.5 # 0.2 solo para la primer interacion
@@ -85,14 +94,13 @@ if __name__ == "__main__":
         arrAuxProb = list()
         for j in range(0, 4):
             #Generacion de numeros Aleatorios
-            alA = generateRandom()[0]
-            alB = generateRandom()[0]
+            alA = generateRandom()
+            alB = generateRandom()
             obsAlX = norm.ppf(alA, 0, sigmaX)
             obsAlY = norm.ppf(alB, 0, sigmaY)
-            #Calcular resto de valores
             tempValX = (xAux + obsAlX)
             tempValY = (yAux + obsAlY)
-            #TODO: Evaluar primero restricciones
+            #Calcular resto de valores
             tempValZn = evulateFunction(tempValX, tempValY)
             tempValDen = (tempValZn - arrayZc[i]) / t
             tempProb = math.exp(tempValDen)
@@ -100,8 +108,8 @@ if __name__ == "__main__":
             #Revisar si se han cumpliado las restricciones y la probabilidad calculada es mejor que la anterior
             while not(evaluateRestrictions(tempValX, tempValY) and tempProb >= bestProb[i]):
                 #Recalcular con nuevos numeros aleatorios
-                alA = generateRandom()[0]
-                alB = generateRandom()[0]
+                alA = generateRandom()
+                alB = generateRandom()
                 obsAlX = norm.ppf(alA, 0, sigmaX)
                 obsAlY = norm.ppf(alB, 0, sigmaY)
                 tempValX = (xAux + obsAlX)
@@ -109,6 +117,13 @@ if __name__ == "__main__":
                 tempValZn = evulateFunction(tempValX, tempValY)
                 tempValDen = (tempValZn - arrayZc[i]) / t
                 tempProb = math.exp(tempValDen)
+                #Revisar tiempo de ejecucion
+                if time.time() - iniTime > 28:
+                    print("P:",bestProb[i])
+                    print("X:",arrValX[i])
+                    print("Y:",arrValY[i])
+                    print("Z:",arrValY[i])
+                    sys.exit()
             
             #Guardar Valores de X,Y y la probabalidad
             arrAuxValX.append(tempValX)
@@ -122,6 +137,11 @@ if __name__ == "__main__":
         arrValY.append(arrAuxValY[indexAux])
         arrayZc.append(evulateFunction(arrAuxValX[indexAux], arrAuxValY[indexAux]))
         bestProb.append(arrAuxProb[indexAux])
+    #Termino todas las interaciones
+    print("P:",arrAuxProb[i])
+    print("X:",arrAuxValX[len(arrAuxValX)-1])
+    print("Y:",arrAuxValY[len(arrAuxValY)-1])
+    print("Z:",arrayZc[len(arrayZc)-1])
 
 
 
