@@ -29,17 +29,48 @@ $(document).ready(function() {
         arrYVal[4] = $(".inputNumber#valy5").val();
         for (let index = 0; index < 5; index++) {
             if (arrXVal[index] !== '' && arrYVal[index] !== '') {
-                arrValidateCoords.push(arrXVal[index])
-                arrValidateCoords.push(arrYVal[index])
+                arrValidateCoords.push(parseFloat(arrXVal[index]))
+                arrValidateCoords.push(parseFloat(arrYVal[index]))
             }
         }
         console.log(arrValidateCoords);
         //
         options.args = arrValidateCoords
         let PythonScript = new PythonShell('readJson.py', options);
-        //Creamos el automata
+        //Llamaos al script
         PythonScript.on('message', function(jsonString) {
             console.log(jsonString)
+                //Crear grafica
+            var myPlot = document.getElementById('graphContent');
+            var xy = new Float32Array(arrValidateCoords);
+
+            data = [{ xy: xy, type: 'pointcloud' }];
+            layout = {
+                title: "Grafica Generada",
+                xaxis: {
+                    type: "linear",
+                    range: [
+                        Math.min(arrXVal) - 2,
+                        Math.max(arrXVal) + 2
+                    ],
+                    autorange: false
+                },
+                yaxis: {
+                    type: "linear",
+                    range: [
+                        Math.min(arrYVal) - 2,
+                        Math.max(arrYVal) + 2
+                    ],
+                    autorange: false
+                },
+                // height: 598,
+                // width: 1080,
+                autosize: true,
+                showlegend: false
+            };
+
+            Plotly.newPlot('graphContent', data, layout);
         });
-    })
+    });
+
 });
