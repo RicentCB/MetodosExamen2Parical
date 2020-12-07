@@ -39,7 +39,9 @@ class ATS:
         x1 = numpy.linspace(numpy.min(xValues)-1, numpy.max(xValues)+1, 100)
         x2 = numpy.linspace(numpy.min(xValues)-1, numpy.max(xValues)+2, 100)
 
-        lineal = solLine[0]*(x1)+ solLine[1]
+        pend = solLine[0]
+        b = solLine[1]
+        lineal = pend*(x1)+ b
         m = numpy.max(xValues)
         exp = numpy.exp(-solGauss[0]*pow((x2-m),2))
 

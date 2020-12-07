@@ -59,12 +59,14 @@ $(document).ready(function() {
                 var b = jsonString.S[1];
                 //Html final
                 let html = "f(x)<sub>1</sub> = " + m + " x + " + b;
+                html += "<b> Z: " + jsonString.Z + "</b>";
                 resultContainer.find("h3#lineal").html("").html(html);
             } else {
                 var m = Math.max.apply(null, arrXVal);
                 var k = jsonString.S[0];
                 //Html final
                 let html = "f(x)<sub>2</sub> = e<sup>-" + k + "(x - " + m + ")<sup>2</sup></sup>"
+                html += "<b> Z: " + jsonString.Z + "</b>";
                 resultContainer.find("h3#exp").html("").html(html);
                 //Ocultar Mensaje
                 $("#process").fadeOut(500);
