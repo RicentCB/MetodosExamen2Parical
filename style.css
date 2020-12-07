@@ -168,3 +168,16 @@ fieldset {
     display: list-item;
     grid-row: 3;
 }
+
+h2 {
+    text-align: center;
+}
+
+math {
+    text-align: center;
+}
+
+h3.result {
+    text-align: center;
+    font-weight: lighter;
+}
